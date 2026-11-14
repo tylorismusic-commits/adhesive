@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <cmath>
 #include <cstdio>
+#include <map>
+#include <string>
 
 #include <lilv/lilv.h>
 
@@ -10,6 +12,27 @@
 using namespace adhesive;
 
 static int g_failures = 0;
+
+struct UriMap {
+  LV2_URID_Map map;
+  std::map<std::string, uint32_t> ids;
+  uint32_t next = 1;
+};
+
+static LV2_URID mapUri(LV2_URID_Map_Handle handle, const char* uri) {
+  UriMap* self = static_cast<UriMap*>(handle);
+  auto it = self->ids.find(uri);
+  if (it != self->ids.end()) {
+    return it->second;
+  }
+  return self->ids[uri] = self->next++;
+}
+
+static int g_emittedPorts = 0;
+
+static void countPort(const char*, void*, const void*, uint32_t, uint32_t) {
+  ++g_emittedPorts;
+}
 
 static void check(bool ok, const char* what) {
   if (!ok) {
@@ -53,6 +76,25 @@ int main(int argc, char** argv) {
       lilv_new_uri(world, "http://lv2plug.in/ns/ext/presets#Preset");
   LilvNodes* presets = lilv_plugin_get_related(plugin, presetClass);
   check(lilv_nodes_size(presets) >= 6, "factory presets found");
+
+  UriMap uris;
+  uris.map.handle = &uris;
+  uris.map.map = &mapUri;
+  int namedPresets = 0;
+  LILV_FOREACH(nodes, n, presets) {
+    const LilvNode* node = lilv_nodes_get(presets, n);
+    LilvState* state = lilv_state_new_from_world(world, &uris.map, node);
+    if (state) {
+      if (lilv_state_get_label(state)) {
+        ++namedPresets;
+      }
+      g_emittedPorts = 0;
+      lilv_state_emit_port_values(state, &countPort, nullptr);
+      check(g_emittedPorts >= 16, "preset supplies every control port");
+      lilv_state_free(state);
+    }
+  }
+  check(namedPresets >= 6, "factory presets have labels");
   lilv_nodes_free(presets);
   lilv_node_free(presetClass);
 

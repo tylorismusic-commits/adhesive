@@ -2,7 +2,7 @@
 @prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-@prefix adhesive: <https://github.com/tylorismusic-commits/adhesive> .
+@prefix adhesive: <https://github.com/tylorismusic-commits/adhesive#> .
 
 adhesive:preset_mix_bus
 	a pset:Preset ;

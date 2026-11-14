@@ -22,29 +22,336 @@
 <https://github.com/tylorismusic-commits/adhesive#preset_mix_bus>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Mix Bus Glue" ;
+	rdfs:comment "Gentle 2:1 SSL-style glue with a little reel tape after the compressor." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -12
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 30
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 20
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 8
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 15
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value -0.5
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
 
 <https://github.com/tylorismusic-commits/adhesive#preset_nolly>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Nolly Mixbus" ;
+	rdfs:comment "Subtle 15 ips reel character, low wow and flutter, and 1-3 dB of bus glue." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -10
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 30
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 1.5
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 30
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 5
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 25
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value -1
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
 
 <https://github.com/tylorismusic-commits/adhesive#preset_drum_bus>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Drum Bus Smash" ;
+	rdfs:comment "Tape into a 4:1 glue stage for a punchy, saturated drum bus." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -18
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 4
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 10
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 4
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 45
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 8
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 20
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value -2
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
 
 <https://github.com/tylorismusic-commits/adhesive#preset_vocal>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Vocal Sheen" ;
+	rdfs:comment "Medium glue with a clean reel pass for a vocal bus or backing stack." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -16
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 3
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 300
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 2
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 25
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 6
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 20
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value -1
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
 
 <https://github.com/tylorismusic-commits/adhesive#preset_cassette>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Cassette Demo" ;
+	rdfs:comment "Narrow, warbly cassette colour with a firm glue stage." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -14
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 4
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 10
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 600
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 3
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 55
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 40
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 55
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value -2
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
 
 <https://github.com/tylorismusic-commits/adhesive#preset_broken>
 	a pset:Preset ;
 	lv2:appliesTo <https://github.com/tylorismusic-commits/adhesive> ;
+	rdfs:label "Broken Machine" ;
+	rdfs:comment "Everything wrong at once: cassette before a pinned 10:1 compressor, full wow and iron." ;
+	lv2:port
+		[
+			lv2:symbol "input_gain" ; pset:value 12
+		] ,
+		[
+			lv2:symbol "glue_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "glue_threshold" ; pset:value -30
+		] ,
+		[
+			lv2:symbol "glue_ratio" ; pset:value 10
+		] ,
+		[
+			lv2:symbol "glue_attack" ; pset:value 0.1
+		] ,
+		[
+			lv2:symbol "glue_release" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "glue_makeup" ; pset:value 18
+		] ,
+		[
+			lv2:symbol "glue_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_on" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_type" ; pset:value 1
+		] ,
+		[
+			lv2:symbol "tape_position" ; pset:value 0
+		] ,
+		[
+			lv2:symbol "tape_drive" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_wow" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "tape_mix" ; pset:value 100
+		] ,
+		[
+			lv2:symbol "output_gain" ; pset:value 7
+		] ,
+		[
+			lv2:symbol "enable" ; pset:value 1
+		] ;
 	rdfs:seeAlso <presets.ttl> .
+
