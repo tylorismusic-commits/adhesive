@@ -246,7 +246,7 @@ struct ClapPlugin {
         "https://github.com/tylorismusic-commits/adhesive",
         "",
         "https://github.com/tylorismusic-commits/adhesive/issues",
-        "0.2.0",
+        "0.2.1",
         "SSL 4000G-inspired bus glue, tape saturation and output iron.",
         features};
     return desc;
