@@ -1,0 +1,396 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix opts: <http://lv2plug.in/ns/ext/options#> .
+@prefix pg:   <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+
+@prefix adhesive: <https://github.com/tylorismusic-commits/adhesive> .
+
+<https://github.com/tylorismusic-commits/adhesive>
+	a lv2:Plugin ,
+		lv2:CompressorPlugin ;
+	lv2:binary <adhesive.so> ;
+	lv2:majorVersion 0 ;
+	lv2:minorVersion 1 ;
+	lv2:microVersion 0 ;
+	lv2:project <https://github.com/tylorismusic-commits/adhesive> ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	doap:license <https://spdx.org/licenses/GPL-3.0-or-later.html> ;
+	doap:name "Adhesive" ;
+	doap:description "SSL 4000G-inspired VCA bus glue and reel-to-reel tape saturation with an always-on output transformer." ;
+	doap:shortdesc "VCA mix-bus glue, reel/cassette tape, and iron." ;
+	foaf:homepage <https://github.com/tylorismusic-commits/adhesive> ;
+	ui:ui <https://github.com/tylorismusic-commits/adhesive#ui> ;
+	lv2:port
+		[
+			a lv2:AudioPort ,
+			lv2:InputPort ;
+			lv2:index 0 ;
+			lv2:symbol "in_l" ;
+			lv2:name "Input Left" ;
+			pg:group <adhesive#input> ;
+			lv2:designation pg:left ;
+			lv2:documentation "Left input of the bus processor." ;
+			] ,
+		[
+			a lv2:AudioPort ,
+			lv2:InputPort ;
+			lv2:index 1 ;
+			lv2:symbol "in_r" ;
+			lv2:name "Input Right" ;
+			pg:group <adhesive#input> ;
+			lv2:designation pg:right ;
+			lv2:documentation "Right input of the bus processor." ;
+			] ,
+		[
+			a lv2:AudioPort ,
+			lv2:OutputPort ;
+			lv2:index 2 ;
+			lv2:symbol "out_l" ;
+			lv2:name "Output Left" ;
+			pg:group <adhesive#output> ;
+			lv2:designation pg:left ;
+			lv2:documentation "Left output of the bus processor." ;
+			] ,
+		[
+			a lv2:AudioPort ,
+			lv2:OutputPort ;
+			lv2:index 3 ;
+			lv2:symbol "out_r" ;
+			lv2:name "Output Right" ;
+			pg:group <adhesive#output> ;
+			lv2:designation pg:right ;
+			lv2:documentation "Right output of the bus processor." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 4 ;
+			lv2:symbol "input_gain" ;
+			lv2:name "Input" ;
+			lv2:group <adhesive#io> ;
+			lv2:default 0 ;
+			lv2:minimum -20 ;
+			lv2:maximum 20 ;
+			units:unit units:db ;
+			lv2:documentation "Input trim before the Glue and Tape stages." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 5 ;
+			lv2:symbol "glue_on" ;
+			lv2:name "Glue" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 1 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1 ;
+			lv2:portProperty lv2:integer ,
+			lv2:toggled ;
+			lv2:documentation "Glue compressor bypass." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 6 ;
+			lv2:symbol "glue_threshold" ;
+			lv2:name "Threshold" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default -15 ;
+			lv2:minimum -30 ;
+			lv2:maximum 0 ;
+			units:unit units:db ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 7 ;
+			lv2:symbol "glue_ratio" ;
+			lv2:name "Ratio" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 2 ;
+			lv2:minimum 2 ;
+			lv2:maximum 10 ;
+			lv2:portProperty lv2:integer ,
+			lv2:enumeration ;
+			lv2:scalePoint [ rdfs:label "2:1" ; rdf:value 2 ] ;
+			lv2:scalePoint [ rdfs:label "4:1" ; rdf:value 4 ] ;
+			lv2:scalePoint [ rdfs:label "10:1" ; rdf:value 10 ] ;
+			lv2:documentation "Stepped SSL 4000G ratio." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 8 ;
+			lv2:symbol "glue_attack" ;
+			lv2:name "Attack" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 30 ;
+			lv2:minimum 0.1 ;
+			lv2:maximum 30 ;
+			units:unit units:ms ;
+			lv2:scalePoint [ rdfs:label "0.1" ; rdf:value 0.1 ] ;
+			lv2:scalePoint [ rdfs:label "0.3" ; rdf:value 0.3 ] ;
+			lv2:scalePoint [ rdfs:label "1" ; rdf:value 1 ] ;
+			lv2:scalePoint [ rdfs:label "3" ; rdf:value 3 ] ;
+			lv2:scalePoint [ rdfs:label "10" ; rdf:value 10 ] ;
+			lv2:scalePoint [ rdfs:label "30" ; rdf:value 30 ] ;
+			lv2:documentation "Stepped SSL 4000G attack." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 9 ;
+			lv2:symbol "glue_release" ;
+			lv2:name "Release" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 0 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1200 ;
+			units:unit units:ms ;
+			lv2:scalePoint [ rdfs:label "Auto" ; rdf:value 0 ] ;
+			lv2:scalePoint [ rdfs:label "0.1" ; rdf:value 100 ] ;
+			lv2:scalePoint [ rdfs:label "0.3" ; rdf:value 300 ] ;
+			lv2:scalePoint [ rdfs:label "0.6" ; rdf:value 600 ] ;
+			lv2:scalePoint [ rdfs:label "1.2" ; rdf:value 1200 ] ;
+			lv2:documentation "Stepped release, 0 selects the program-dependent Auto release." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 10 ;
+			lv2:symbol "glue_makeup" ;
+			lv2:name "Makeup" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 0 ;
+			lv2:minimum 0 ;
+			lv2:maximum 20 ;
+			units:unit units:db ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 11 ;
+			lv2:symbol "glue_mix" ;
+			lv2:name "Mix" ;
+			lv2:group <adhesive#glue> ;
+			lv2:default 100 ;
+			lv2:minimum 0 ;
+			lv2:maximum 100 ;
+			units:unit units:pc ;
+			lv2:documentation "Parallel blend for the Glue compressor." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 12 ;
+			lv2:symbol "tape_on" ;
+			lv2:name "Tape" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 1 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1 ;
+			lv2:portProperty lv2:integer ,
+			lv2:toggled ;
+			lv2:documentation "Tape stage bypass." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 13 ;
+			lv2:symbol "tape_type" ;
+			lv2:name "Tape Type" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 0 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1 ;
+			lv2:portProperty lv2:integer ,
+			lv2:enumeration ;
+			lv2:scalePoint [ rdfs:label "Reel" ; rdf:value 0 ] ;
+			lv2:scalePoint [ rdfs:label "Cassette" ; rdf:value 1 ] ;
+			lv2:documentation "Reel-to-reel is wide and clean; cassette is narrower and more warbly." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 14 ;
+			lv2:symbol "tape_position" ;
+			lv2:name "Tape Position" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 1 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1 ;
+			lv2:portProperty lv2:integer ,
+			lv2:enumeration ;
+			lv2:scalePoint [ rdfs:label "Before Glue" ; rdf:value 0 ] ;
+			lv2:scalePoint [ rdfs:label "After Glue" ; rdf:value 1 ] ;
+			lv2:documentation "Places the tape stage before or after the Glue compressor." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 15 ;
+			lv2:symbol "tape_drive" ;
+			lv2:name "Drive" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 20 ;
+			lv2:minimum 0 ;
+			lv2:maximum 100 ;
+			units:unit units:pc ;
+			lv2:documentation "Record-side tape saturation." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 16 ;
+			lv2:symbol "tape_wow" ;
+			lv2:name "Wow" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 10 ;
+			lv2:minimum 0 ;
+			lv2:maximum 100 ;
+			units:unit units:pc ;
+			lv2:documentation "Wow and flutter depth." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 17 ;
+			lv2:symbol "tape_mix" ;
+			lv2:name "Tape Mix" ;
+			lv2:group <adhesive#tape> ;
+			lv2:default 25 ;
+			lv2:minimum 0 ;
+			lv2:maximum 100 ;
+			units:unit units:pc ;
+			lv2:documentation "Parallel blend for the tape stage." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 18 ;
+			lv2:symbol "output_gain" ;
+			lv2:name "Output" ;
+			lv2:group <adhesive#output_section> ;
+			lv2:default 0 ;
+			lv2:minimum -60 ;
+			lv2:maximum 12 ;
+			units:unit units:db ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:InputPort ;
+			lv2:index 19 ;
+			lv2:symbol "enable" ;
+			lv2:name "Enabled" ;
+			lv2:group <adhesive#global> ;
+			lv2:default 1 ;
+			lv2:minimum 0 ;
+			lv2:maximum 1 ;
+			lv2:portProperty lv2:integer ,
+			lv2:toggled ;
+			lv2:documentation "Master bypass.  The always-on transformer is skipped when bypassed." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:OutputPort ;
+			lv2:index 20 ;
+			lv2:symbol "gr_meter" ;
+			lv2:name "Gain Reduction" ;
+			lv2:group <adhesive#global> ;
+			lv2:default 0 ;
+			lv2:minimum -60 ;
+			lv2:maximum 0 ;
+			units:unit units:db ;
+			lv2:documentation "Gain reduction applied by the Glue compressor, in dB (negative)." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:OutputPort ;
+			lv2:index 21 ;
+			lv2:symbol "out_meter" ;
+			lv2:name "Output Level" ;
+			lv2:group <adhesive#global> ;
+			lv2:default -60 ;
+			lv2:minimum -60 ;
+			lv2:maximum 6 ;
+			units:unit units:db ;
+			lv2:documentation "Peak output level in dBFS of the last block." ;
+			] ,
+		[
+			a lv2:ControlPort ,
+			lv2:OutputPort ;
+			lv2:index 22 ;
+			lv2:symbol "latency" ;
+			lv2:name "Latency" ;
+			lv2:group <adhesive#global> ;
+			lv2:default 0 ;
+			lv2:minimum 0 ;
+			lv2:maximum 100000 ;
+			lv2:designation lv2:latency ;
+			units:unit units:frame ;
+			lv2:documentation "Constant transport delay of the tape stage, in samples." ;
+			] .
+
+# Audio input / output groups
+<adhesive#input>
+	a pg:Group ;
+	lv2:name "Input" ;
+	lv2:symbol "input" ;
+	.
+
+<adhesive#output>
+	a pg:Group ;
+	lv2:name "Output" ;
+	lv2:symbol "output" ;
+	.
+
+<adhesive#io>
+	a pg:Group ;
+	lv2:name "I/O" ;
+	lv2:symbol "io" ;
+	.
+
+<adhesive#glue>
+	a pg:Group ;
+	lv2:name "Glue" ;
+	lv2:symbol "glue" ;
+	.
+
+<adhesive#tape>
+	a pg:Group ;
+	lv2:name "Tape" ;
+	lv2:symbol "tape" ;
+	.
+
+<adhesive#output_section>
+	a pg:Group ;
+	lv2:name "Output Fader" ;
+	lv2:symbol "output" ;
+	.
+
+<adhesive#global>
+	a pg:Group ;
+	lv2:name "Global" ;
+	lv2:symbol "global" ;
+	.
+
+<adhesive#ui>
+	a ui:X11UI ;
+	ui:binary <adhesiveUI.so> ;
+	lv2:requiredFeature ui:idleInterface , ui:parent ;
+	lv2:optionalFeature ui:resize , opts:options ;
+	lv2:extensionData ui:idleInterface , ui:resize ;
+	opts:supportedOption ui:scaleFactor ;
+	ui:portNotification [
+			ui:plugin <https://github.com/tylorismusic-commits/adhesive> ;
+			ui:portIndex 20 ;
+	] , [
+			ui:plugin <https://github.com/tylorismusic-commits/adhesive> ;
+			ui:portIndex 21 ;
+	] ;
+	.
