@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- CLAP builds now forward the meter ports to the native UI, so the VU and
+  gain-reduction meters update in CLAP exactly as they do in LV2.
+
 ## 0.1.1
 
 - Added the Harrison/Ardour inline-display extension with a live
