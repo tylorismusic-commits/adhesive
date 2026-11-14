@@ -166,9 +166,6 @@ static clap_param_info_flags paramFlags(const ParamInfo& p) {
   if (p.enumeration) {
     flags |= CLAP_PARAM_IS_STEPPED | CLAP_PARAM_IS_ENUM;
   }
-  if (p.index == PORT_ENABLE) {
-    flags |= CLAP_PARAM_IS_BYPASS;
-  }
   return flags;
 }
 
@@ -249,7 +246,7 @@ struct ClapPlugin {
         "https://github.com/tylorismusic-commits/adhesive",
         "",
         "https://github.com/tylorismusic-commits/adhesive/issues",
-        "0.1.2",
+        "0.1.3",
         "SSL 4000G-inspired bus glue, tape saturation and output iron.",
         features};
     return desc;

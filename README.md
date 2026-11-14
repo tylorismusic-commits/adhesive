@@ -2,7 +2,7 @@
 
 [![build](https://github.com/tylorismusic-commits/adhesive/actions/workflows/build.yml/badge.svg)](https://github.com/tylorismusic-commits/adhesive/actions/workflows/build.yml)
 
-**Version 0.1.2** · [GitHub](https://github.com/tylorismusic-commits/adhesive) · GPL-3.0-or-later
+**Version 0.1.3** · [GitHub](https://github.com/tylorismusic-commits/adhesive) · GPL-3.0-or-later
 
 **Adhesive** is a free, open-source LV2 and CLAP bus processor for Linux: an SSL 4000G-inspired
 VCA “Glue” compressor, a reel-to-reel or cassette tape stage that can run before or
@@ -123,7 +123,8 @@ them.
 - **Input** — −20 to +20 dB trim.
 - **Output** — output fader.
 - **IN / BYPASS** — master bypass. Bypass skips Glue, Tape, the transformer, and the
-  output clipper; it still preserves the reported latency.
+  output clipper; it still preserves the reported latency. It is separate from
+  the host's own FX bypass.
 
 ## Gain reduction metering
 
