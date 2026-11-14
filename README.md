@@ -2,7 +2,7 @@
 
 [![build](https://github.com/tylorismusic-commits/adhesive/actions/workflows/build.yml/badge.svg)](https://github.com/tylorismusic-commits/adhesive/actions/workflows/build.yml)
 
-**Version 0.1.3** · [GitHub](https://github.com/tylorismusic-commits/adhesive) · GPL-3.0-or-later
+**Version 0.2.0** · [GitHub](https://github.com/tylorismusic-commits/adhesive) · GPL-3.0-or-later
 
 **Adhesive** is a free, open-source LV2 and CLAP bus processor for Linux: an SSL 4000G-inspired
 VCA “Glue” compressor, a reel-to-reel or cassette tape stage that can run before or
@@ -137,6 +137,14 @@ them.
   bar then appears on the track meter.
 - The LV2 build also publishes GR on its `gr_meter` output port for generic
   hosts and automation.
+
+## Skins
+
+The swatch or `SKIN` chip in the plugin header cycles the suite skin. The free
+Classic theme is built in. Additional skins can be installed in
+`~/.local/share/hearth/skins/<skin>/` with a `palette.ini`; the selection is
+shared across the Hearth suite and stored in `~/.config/hearth/skins.conf`.
+Skins change only the UI colors and artwork, never the audio or project state.
 
 ## Build
 

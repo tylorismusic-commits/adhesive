@@ -1466,7 +1466,7 @@ static void drawHeader(cairo_t* cr, const State& s) {
   drawSkinChip(cr, s);
   textAt(cr, 468.0, 42.0, "BUS", 6.5, true, kMuted);
   textAt(cr, 468.0, 52.0, "GLUE", 6.5, false, kMuted);
-  textAt(cr, 468.0, 62.0, "v0.1.3", 5.5, false, kMuted);
+  textAt(cr, 468.0, 62.0, "v0.2.0", 5.5, false, kMuted);
 
   // brushed-metal strip along the bottom of the header
   cairo_pattern_t* strip = cairo_pattern_create_linear(0, 76, 0, 80);
