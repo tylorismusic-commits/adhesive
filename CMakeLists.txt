@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(adhesive VERSION 0.1.0 LANGUAGES CXX)
+project(adhesive VERSION 0.1.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,8 +13,11 @@ enable_testing()
 
 set(LV2_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/lv2"
     CACHE PATH "Directory where LV2 bundles are installed")
+set(CLAP_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/clap"
+    CACHE PATH "Directory where CLAP bundles are installed")
 
 find_package(PkgConfig REQUIRED)
+find_package(Threads REQUIRED)
 pkg_check_modules(LV2 REQUIRED IMPORTED_TARGET lv2)
 pkg_check_modules(LILV QUIET IMPORTED_TARGET lilv-0)
 pkg_check_modules(CAIRO QUIET IMPORTED_TARGET cairo)
@@ -120,6 +123,72 @@ install(FILES
   assets/fonts/Jost-ExtraBold.ttf
   assets/fonts/OFL.txt
   DESTINATION "${LV2_DIR}/adhesive.lv2")
+
+# ---------------------------------------------------------------------------
+# CLAP build: same DSP and X11 UI, plus clap.gain-adjustment-metering so
+# REAPER and other CLAP hosts can show gain reduction on their track meters.
+# ---------------------------------------------------------------------------
+add_library(adhesive_clap MODULE
+  src/clap/adhesive_clap.cpp
+)
+target_link_libraries(adhesive_clap PRIVATE PkgConfig::LV2 ${CMAKE_DL_LIBS}
+  Threads::Threads)
+target_compile_features(adhesive_clap PRIVATE cxx_std_17)
+target_include_directories(adhesive_clap PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_SOURCE_DIR}/src/dsp"
+  "${CMAKE_SOURCE_DIR}/src/adhesive"
+  "${CMAKE_SOURCE_DIR}/third_party/clap/include"
+  ${PKG_CONFIG_LV2_INCLUDE_DIRS})
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/clap")
+set_target_properties(adhesive_clap PROPERTIES
+  PREFIX ""
+  OUTPUT_NAME "Adhesive"
+  SUFFIX ".clap"
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/clap")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  target_compile_options(adhesive_clap PRIVATE -Wall -Wextra -fvisibility=hidden)
+endif()
+
+set(ADHESIVE_CLAP_ASSETS
+  "${CMAKE_SOURCE_DIR}/assets/knob.png"
+  "${CMAKE_SOURCE_DIR}/assets/metal.png"
+  "${CMAKE_SOURCE_DIR}/assets/fonts/Jost-ExtraBold.ttf"
+  "${CMAKE_SOURCE_DIR}/assets/fonts/OFL.txt")
+
+if(CAIRO_FOUND AND X11_FOUND AND FREETYPE_FOUND)
+  add_custom_target(adhesive_clap_bundle ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+            "${CMAKE_BINARY_DIR}/clap/Adhesive.resources"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ADHESIVE_CLAP_ASSETS}
+            "${CMAKE_BINARY_DIR}/clap/Adhesive.resources/"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<TARGET_FILE:adhesive_ui>"
+            "${CMAKE_BINARY_DIR}/clap/Adhesive.resources/adhesiveUI.so"
+    DEPENDS adhesive_clap adhesive_ui ${ADHESIVE_CLAP_ASSETS})
+endif()
+
+if(TARGET adhesive_clap_bundle)
+  install(TARGETS adhesive_clap LIBRARY DESTINATION "${CLAP_DIR}")
+  install(DIRECTORY "${CMAKE_BINARY_DIR}/clap/Adhesive.resources"
+          DESTINATION "${CLAP_DIR}")
+endif()
+
+if(X11_FOUND AND XVFB_RUN)
+  add_executable(adhesive_clap_host_test
+    test/clap_host_test.cpp
+  )
+  target_include_directories(adhesive_clap_host_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/third_party/clap/include")
+  target_link_libraries(adhesive_clap_host_test PRIVATE PkgConfig::X11
+    ${CMAKE_DL_LIBS})
+  add_dependencies(adhesive_clap_host_test adhesive_clap_bundle)
+  add_test(NAME adhesive_clap_host
+    COMMAND "${XVFB_RUN}" -a -s "-screen 0 1600x1000x24"
+      "$<TARGET_FILE:adhesive_clap_host_test>"
+      "${CMAKE_BINARY_DIR}/clap/Adhesive.clap"
+      "com.tylorismusic.adhesive")
+endif()
 
 add_executable(adhesive_dsp_test
   test/test_dsp.cpp

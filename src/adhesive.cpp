@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <cmath>
 #include <cstdint>
+#include <cstring>
 #include <new>
 
 #include <lv2/core/lv2.h>
 
 #include "adhesive_strip.hpp"
+#include "inline_display.hpp"
 #include "param_info.hpp"
 #include "params.hpp"
 
@@ -18,6 +20,9 @@ public:
   float sampleRate = 48000.0f;
   AdhesiveStrip strip;
   Params params;
+  InlineDisplay display;
+  const InlineDisplayQueueDraw* queueDraw = nullptr;
+  uint32_t drawCounter = 0;
 };
 
 static const ParamInfo& infoFor(uint32_t index) noexcept {
@@ -91,12 +96,18 @@ extern "C" LV2_Handle lv2_adhesive_instantiate(
     const LV2_Feature* const* features) {
   (void)descriptor;
   (void)bundle_path;
-  (void)features;
 
   adhesive::AdhesiveInstance* self =
       new (std::nothrow) adhesive::AdhesiveInstance();
   if (!self) {
     return nullptr;
+  }
+  for (const LV2_Feature* const* f = features; f && *f; ++f) {
+    if (!std::strcmp((*f)->URI, adhesive::kInlineDisplayQueueDrawURI) &&
+        (*f)->data) {
+      self->queueDraw = static_cast<const adhesive::InlineDisplayQueueDraw*>(
+          static_cast<const void*>((*f)->data));
+    }
   }
   self->sampleRate = std::max(8000.0f, static_cast<float>(rate));
   self->strip.prepare(self->sampleRate);
@@ -104,6 +115,7 @@ extern "C" LV2_Handle lv2_adhesive_instantiate(
   adhesive::readParams(self);
   self->strip.setTargets(self->params);
   self->strip.reset();
+  self->display.setGainReductionDb(0.0f);
   return self;
 }
 
@@ -131,6 +143,7 @@ extern "C" void lv2_adhesive_activate(LV2_Handle handle) {
   adhesive::readParams(self);
   self->strip.setTargets(self->params);
   self->strip.reset();
+  self->display.setGainReductionDb(0.0f);
   adhesive::reportLatency(self);
 }
 
@@ -163,6 +176,12 @@ extern "C" void lv2_adhesive_run(LV2_Handle handle, uint32_t sampleCount) {
     self->ports[PORT_METER_OUT][0] = outDb;
   }
   adhesive::reportLatency(self);
+
+  self->display.setGainReductionDb(std::max(0.0f, -grDb));
+  if (self->queueDraw && self->queueDraw->queue_draw &&
+      ((self->drawCounter++ & 31u) == 0u)) {
+    self->queueDraw->queue_draw(self->queueDraw->handle);
+  }
 }
 
 extern "C" void lv2_adhesive_deactivate(LV2_Handle handle) {
@@ -172,14 +191,28 @@ extern "C" void lv2_adhesive_deactivate(LV2_Handle handle) {
     return;
   }
   self->strip.reset();
+  self->display.setGainReductionDb(0.0f);
 }
 
 extern "C" void lv2_adhesive_cleanup(LV2_Handle handle) {
   delete static_cast<adhesive::AdhesiveInstance*>(handle);
 }
 
+static adhesive::InlineDisplaySurface* renderInlineDisplay(void* instance,
+                                                           uint32_t width,
+                                                           uint32_t height) {
+  adhesive::AdhesiveInstance* self =
+      static_cast<adhesive::AdhesiveInstance*>(instance);
+  return self ? self->display.render(width, height) : nullptr;
+}
+
+static const adhesive::InlineDisplayInterface adhesiveDisplayInterface = {
+    &renderInlineDisplay};
+
 extern "C" const void* lv2_adhesive_extension_data(const char* uri) {
-  (void)uri;
+  if (!std::strcmp(uri, adhesive::kInlineDisplayInterfaceURI)) {
+    return &adhesiveDisplayInterface;
+  }
   return nullptr;
 }
 
